@@ -1,0 +1,5 @@
+= Redmine Auto Watchers From Groups
+
+Add functionality to automatic add all members of group when issue(s) assigned to this group
+
+Groups affected this automatic watching could be specified on plugin settings page

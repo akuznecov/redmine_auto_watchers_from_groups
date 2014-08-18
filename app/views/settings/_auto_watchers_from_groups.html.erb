@@ -1,0 +1,12 @@
+<%-
+groups = Group.all.sort
+selected = @settings['groups_enabled'].collect(&:to_i) unless @settings['groups_enabled'].blank?
+selected ||= []
+-%>
+
+<p><%= content_tag(:label, l(:label_groups_enabled)) %><%=
+        select_tag("settings[groups_enabled]",
+        content_tag(:option, '') + options_from_collection_for_select(groups, :id, :name, selected ),
+        :multiple => true,
+        :size => 25)
+%></p>
