@@ -25,12 +25,17 @@ module AutoWatchersFromGroups
 				# group assign with category default assignee
 				@project = context[:params][:project_id]
 				@project = context[:params][:issue][:project_id] if context[:params][:issue][:project_id]
-				if context[:params][:issue][:assigned_to_id].blank? && !context[:params][:issue][:category_id].blank? && context[:params][:Commit] == "Create"
-					if @settings['groups_enabled'].include? group_id = Project.find(@project).issue_categories.find_by_id(context[:params][:issue][:category_id]).assigned_to_id.to_s 
-						group = Group.find group_id
+
+				if context[:params][:issue][:assigned_to_id].blank?
+					unless context[:params][:issue][:category_id].blank?
+						if context[:params][:commit] == "Create"
+							if @settings['groups_enabled'].include? group_id = Project.find(@project).issue_categories.find_by_id(context[:params][:issue][:category_id]).assigned_to_id.to_s
+								group = Group.find group_id
+							end
+						end
 					end
 				end
-				
+
 				unless group.nil?
 					group.users.each do |new_watcher|
 						Watcher.create(:watchable => @issue, :user => new_watcher)
