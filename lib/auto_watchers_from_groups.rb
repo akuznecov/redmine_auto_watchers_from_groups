@@ -13,7 +13,7 @@ module AutoWatchersFromGroups
 		def auto_watchers(context)
 
 			@settings ||= Setting.plugin_redmine_auto_watchers_from_groups
-			@issue = Issue.find context[:issue]
+			@issue = Issue.find context[:issue][:id]
 
 			if context[:params][:issue]
 
