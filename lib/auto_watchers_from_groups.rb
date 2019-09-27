@@ -16,17 +16,10 @@ module AutoWatchersFromGroups
 			@issue = Issue.find context[:issue][:id]
 
 			if context[:params][:issue]
-
-				# normal group assign
-				if @settings['groups_enabled'].include? context[:params][:issue][:assigned_to_id]
-					group = Group.find context[:params][:issue][:assigned_to_id]
-				end
-
-				# group assign with category default assignee
-				@project = context[:params][:project_id]
-				@project = context[:params][:issue][:project_id] if context[:params][:issue][:project_id]
-
 				if context[:params][:issue][:assigned_to_id].blank?
+					# group assign with category default assignee
+					@project = context[:params][:project_id]
+					@project = context[:params][:issue][:project_id] if context[:params][:issue][:project_id]
 					unless context[:params][:issue][:category_id].blank?
 						if context[:params][:commit] == "Create"
 							if @settings['groups_enabled'].include? group_id = Project.find(@project).issue_categories.find_by_id(context[:params][:issue][:category_id]).assigned_to_id.to_s
@@ -34,6 +27,9 @@ module AutoWatchersFromGroups
 							end
 						end
 					end
+				elsif @settings['groups_enabled'].include? context[:params][:issue][:assigned_to_id]
+					# normal group assign
+					group = Group.find context[:params][:issue][:assigned_to_id]
 				end
 
 				unless group.nil?
